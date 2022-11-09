@@ -1,0 +1,21 @@
+{
+  "ModId": "p5rpc.inputhook",
+  "ModName": "Persona 5 Royal Input Hook",
+  "ModAuthor": "AnimatedSwine37",
+  "ModVersion": "1.0.0",
+  "ModDescription": "A library for reading and injecting inputs into P5R",
+  "ModDll": "p5rpc.inputhook.dll",
+  "ModIcon": "Preview.png",
+  "ModR2RManagedDll32": "x86/p5rpc.inputhook.dll",
+  "ModR2RManagedDll64": "x64/p5rpc.inputhook.dll",
+  "ModNativeDll32": "",
+  "ModNativeDll64": "",
+  "IsLibrary": false,
+  "ReleaseMetadataFileName": "p5rpc.inputhook.ReleaseMetadata.json",
+  "PluginData": {},
+  "IsUniversalMod": false,
+  "ModDependencies": [ "reloaded.sharedlib.hooks", "Reloaded.Memory.SigScan.ReloadedII" ],
+  "OptionalDependencies": [],
+  "SupportedAppId": ["p5r.exe"],
+  "ProjectUrl": ""
+}
