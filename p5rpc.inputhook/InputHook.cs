@@ -64,7 +64,7 @@ namespace p5rpc.inputhook
         {
             FixedArrayPtr<Key> pressedKeys = new(pressedKeyInfo, numKeys);
             Utils.LogDebug($"Pressed keys: {string.Join(", ", pressedKeys)}");
-            OnInput?.Invoke(pressedKeys.ToList());
+            Task.Run(() => OnInput?.Invoke(pressedKeys.ToList()));
             return numKeys;
         }
 
