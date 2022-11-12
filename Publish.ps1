@@ -153,7 +153,7 @@
 [cmdletbinding()]
 param (
     $IsPrerelease=$False, 
-    $MakeDelta=$True, 
+    $MakeDelta=$False, 
     $ChangelogPath="",
     $ReadmePath="",
     $Build=$True,
