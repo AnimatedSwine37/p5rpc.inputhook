@@ -153,7 +153,7 @@
 [cmdletbinding()]
 param (
     $IsPrerelease=$False, 
-    $MakeDelta=$False, 
+    $MakeDelta=$True, 
     $ChangelogPath="",
     $ReadmePath="",
     $Build=$True,
@@ -162,7 +162,7 @@ param (
     $UseScriptDirectory=$True,
 
     ## => User Config <= ## 
-    $ProjectPath = "p5rpc.inputhook.csproj",
+    $ProjectPath = "p5rpc.inputhook/p5rpc.inputhook.csproj",
     $PackageName = "p5rpc.inputhook",
     $PublishOutputDir = "Publish/ToUpload",
 
@@ -171,10 +171,10 @@ param (
     $MetadataFileName = "Sewer56.Update.ReleaseMetadata.json",
     $UseGitHubDelta = $False, # GitHub Releases
     $UseGameBananaDelta = $False,
-    $UseNuGetDelta = $False,
+    $UseNuGetDelta = $True,
 
-    $GitHubUserName = "", # Name of the GitHub user where the mod is contained
-    $GitHubRepoName = "", # Name of the GitHub repo where the mod is contained
+    $GitHubUserName = "AnimatedSwine37", # Name of the GitHub user where the mod is contained
+    $GitHubRepoName = "p5rpc.inputhook", # Name of the GitHub repo where the mod is contained
     $GitHubFallbackPattern = "", # For migrating from legacy build script.
     $GitHubInheritVersionFromTag = $True, # Uses version determined from release tag as opposed to metadata file in latest release.
 
