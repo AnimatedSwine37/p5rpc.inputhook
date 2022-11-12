@@ -11,13 +11,29 @@ namespace p5rpc.inputhook.interfaces
     {
         /// <summary>
         /// This event occurs whenever the game recieves an input just before it is processed
+        /// With this event you only read the input, if you want to edit it use <see cref="OnInputIntercept"/>
         /// </summary>
         public event OnInputEvent OnInput;
+
+        /// <summary>
+        /// This event occurs whenever the game recieves an input just before it is processed
+        /// With this event you can edit the input before it is processed, for just reading inputs use <see cref="OnInput"/>
+        /// </summary>
+        public event OnInputInterceptEvent OnInputIntercept;
     }
 
     /// <summary>
     /// A delegate for an event that occurs whenever the game recieves an input just before it is processed
+    /// Ran asynchronously so use for reading inputs before they are processed
     /// </summary>
-    /// <param name="inputs"></param>
+    /// <param name="inputs">The rising edge inputs that were recieved</param>
     public delegate void OnInputEvent(List<Key> inputs);
+
+    /// <summary>
+    /// A delegate for an event that occurs whenever the game recieves an input just before it is processed
+    /// Ran synchronously so use for editing inputs before they are processed
+    /// </summary>
+    /// <param name="inputs">The rising edge inputs that were recieved</param>
+    /// <returns></returns>
+    public delegate void OnInputInterceptEvent(List<Key> inputs);
 }

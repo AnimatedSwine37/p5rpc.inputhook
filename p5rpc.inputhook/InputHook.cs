@@ -30,11 +30,14 @@ namespace p5rpc.inputhook
 
         private IReverseWrapper<KeyPressedFunction> _keyPressedReverseWrapper;
 
+        private IMemory _memory;
+
 
         public InputHook(IStartupScanner startupScanner, IReloadedHooks hooks, Config configuration)
         {
             _hooks = hooks;
             _configuration = configuration;
+            _memory = new Memory();
             startupScanner.AddMainModuleScan("0F 28 74 24 ?? 48 8D 34 85 00 00 00 00", InitKeyboardHook);
         }
 
@@ -64,11 +67,21 @@ namespace p5rpc.inputhook
         {
             FixedArrayPtr<Key> pressedKeys = new(pressedKeyInfo, numKeys);
             Utils.LogDebug($"Pressed keys: {string.Join(", ", pressedKeys)}");
-            Task.Run(() => OnInput?.Invoke(pressedKeys.ToList()));
-            return numKeys;
+            List<Key> pressedKeysList = pressedKeys.ToList();
+            if(OnInputIntercept?.GetInvocationList().Length != 0)
+            {
+                OnInputIntercept?.Invoke(pressedKeysList);
+                _memory.Write(pressedKeyInfo, pressedKeysList.ToArray());
+            }
+
+            Task.Run(() => OnInput?.Invoke(pressedKeysList));
+            
+            return pressedKeysList.Count;
         }
 
         public event OnInputEvent OnInput;
+
+        public event OnInputInterceptEvent OnInputIntercept;
 
         [Function(new Register[] { Register.rax, Register.r13 }, Register.rax, false)]
         private delegate int KeyPressedFunction(int numKeys, nuint pressedKeyInfo);
