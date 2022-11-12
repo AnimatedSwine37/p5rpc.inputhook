@@ -1,5 +1,7 @@
 ﻿using p5rpc.inputhook.Configuration;
+using p5rpc.inputhook.interfaces;
 using p5rpc.inputhook.Template;
+using Reloaded.Hooks.Definitions;
 using Reloaded.Hooks.Definitions.X64;
 using Reloaded.Hooks.ReloadedII.Interfaces;
 using Reloaded.Memory.Sigscan.Definitions.Structs;
@@ -7,6 +9,8 @@ using Reloaded.Memory.SigScan.ReloadedII.Interfaces;
 using Reloaded.Mod.Interfaces;
 using System.Diagnostics;
 using System.Drawing;
+using static Reloaded.Hooks.Definitions.X64.FunctionAttribute;
+using IReloadedHooks = Reloaded.Hooks.ReloadedII.Interfaces.IReloadedHooks;
 
 namespace p5rpc.inputhook
 {
@@ -46,10 +50,8 @@ namespace p5rpc.inputhook
         /// </summary>
         private readonly IModConfig _modConfig;
 
-        private GetKeyboardInputInfoFunction GetKeyboardInputInfo;
+        private InputHook _inputHook;
 
-        private Timer _inputTimer;
-        
         public Mod(ModContext context)
         {
             _modLoader = context.ModLoader;
@@ -77,46 +79,9 @@ namespace p5rpc.inputhook
                 return;
             }
 
-            startupScanner.AddMainModuleScan("48 83 EC 28 33 D2 E8 ?? ?? ?? ?? 48 83 C0 60", InitKeyboardHook);
-
+            _inputHook = new InputHook(startupScanner, _hooks, _configuration);
+            _modLoader.AddOrReplaceController<IInputHook>(_owner, _inputHook);
         }
-
-        private void InitKeyboardHook(PatternScanResult result)
-        {
-            if(!result.Found)
-            {
-                Utils.LogError("Unable to find keyboard hook function, aborting initialisation");
-                return;
-            }
-
-            Utils.LogDebug($"Found keyboard hook function at 0x{result.Offset + Utils.BaseAddress:X}");
-            GetKeyboardInputInfo = _hooks.CreateWrapper<GetKeyboardInputInfoFunction>(result.Offset + Utils.BaseAddress, out _);
-            Debugger.Launch();
-            _inputTimer = new Timer(PollInput, null, TimeSpan.FromMilliseconds(10000), TimeSpan.FromMilliseconds(10));
-        }
-
-        private int GetKeyboardInput()
-        {
-            int** inputInfo = GetKeyboardInputInfo(0, 0);
-            if (*(inputInfo + 1) != (int*)0)
-            {
-                return **inputInfo;
-            }
-            return 0;
-        }
-
-        private void PollInput(object? state)
-        {
-            var input = GetKeyboardInput();
-            if (input == 0)
-                return;
-
-            Utils.LogDebug($"Input: 0x{input:X}");
-        }
-
-        [Function(CallingConventions.Microsoft)]
-        public delegate int** GetKeyboardInputInfoFunction(int param1, int param2);
-
 
         #region Standard Overrides
         public override void ConfigurationUpdated(Config configuration)

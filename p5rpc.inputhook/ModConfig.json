@@ -10,7 +10,7 @@
   "ModR2RManagedDll64": "x64/p5rpc.inputhook.dll",
   "ModNativeDll32": "",
   "ModNativeDll64": "",
-  "IsLibrary": false,
+  "IsLibrary": true,
   "ReleaseMetadataFileName": "p5rpc.inputhook.ReleaseMetadata.json",
   "PluginData": {},
   "IsUniversalMod": false,
