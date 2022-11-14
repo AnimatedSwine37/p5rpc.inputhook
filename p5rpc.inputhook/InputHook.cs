@@ -58,10 +58,6 @@ namespace p5rpc.inputhook
                 "use64",
                 $"{_hooks.Utilities.GetAbsoluteCallMnemonics(KeyPressed, out _keyPressedReverseWrapper)}",
             };
-            foreach (var line in function)
-            {
-                Utils.LogDebug(line);
-            }
             _keyPressedHook = _hooks.CreateAsmHook(function, result.Offset + Utils.BaseAddress, AsmHookBehaviour.ExecuteFirst).Activate();
         }
 
